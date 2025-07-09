@@ -33,11 +33,17 @@ export async function POST(req) {
       return new Response("Invalid credentials", { status: 401 });
     }
 
-    // Return public user data (do NOT include password)
+    // Return public user data (NOT include password)
     const userData = {
       id: user.user_id,
       username: user.username,
       email: user.email,
+      date_of_birth: user.date_of_birth,
+      gender: user.gender,
+      address: user.address,
+      city: user.city,
+      contact_no: user.contact_no,
+      paypal_id: user.paypal_id,
     };
 
     return Response.json(userData);
