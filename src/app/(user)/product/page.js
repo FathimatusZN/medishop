@@ -39,6 +39,36 @@ export default function ProductListPage() {
     }
   }, [category, products]);
 
+  // Function handleBuy
+  const handleBuy = async (product_id) => {
+    const user_id = sessionStorage.getItem("user_id");
+
+    if (!user_id) {
+      alert("Please login first");
+      router.push("/login");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id,
+          product_id,
+          quantity: 1,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to add to cart");
+
+      alert("Added to cart!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add to cart");
+    }
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">Our Products</h1>
@@ -92,7 +122,7 @@ export default function ProductListPage() {
                 View
               </button>
               <button
-                onClick={() => alert("Buy clicked!")}
+                onClick={() => handleBuy(product.product_id)}
                 className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
               >
                 Buy
