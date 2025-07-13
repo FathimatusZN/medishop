@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,8 +30,16 @@ export default function LoginPage() {
       }
 
       const user = await res.json();
-      setSuccess(`Welcome, ${user.username}!`);
-      // Optionally store token / redirect after login
+      sessionStorage.setItem("role", user.role);
+
+      // redirect based on user role
+      if (user.role === 1) {
+        router.push("/product");
+      } else if (user.role === 2) {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/"); // fallback if role is unknown
+      }
     } catch (err) {
       setError("Login failed. Please try again later.");
     }
