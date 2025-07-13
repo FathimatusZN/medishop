@@ -31,6 +31,7 @@ export default function LoginPage() {
 
       const user = await res.json();
       sessionStorage.setItem("role", user.role);
+      sessionStorage.setItem("user_id", user.id);
 
       // redirect based on user role
       if (user.role === 1) {
