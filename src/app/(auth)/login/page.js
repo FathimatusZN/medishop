@@ -36,7 +36,7 @@ export default function LoginPage() {
       if (user.role === 1) {
         router.push("/product");
       } else if (user.role === 2) {
-        router.push("/admin/dashboard");
+        router.push("/dashboard");
       } else {
         router.push("/"); // fallback if role is unknown
       }
