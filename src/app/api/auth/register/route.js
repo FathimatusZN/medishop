@@ -55,12 +55,15 @@ export async function POST(req) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Default role 1 for user, 2 for admin
+    const role = 1;
+
     // Insert new user with all fields
     await db.query(
       `INSERT INTO users 
-        (user_id, username, email, password, date_of_birth, gender, address, city, contact_no, paypal_id)
+        (user_id, username, email, password, date_of_birth, gender, address, city, contact_no, paypal_id, role)
        VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
       [
         newUserId,
         username,
@@ -72,6 +75,7 @@ export async function POST(req) {
         city || null,
         contact_no || null,
         paypal_id || null,
+        role,
       ]
     );
 
