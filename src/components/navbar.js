@@ -34,14 +34,14 @@ export default function Navbar() {
     buyer: [
       { label: "Product", href: "/product" },
       { label: "Cart", href: "/cart" },
-      { label: "History", href: "/purchase-history" },
+      { label: "History", href: "/purchase" },
       { label: "Profile", href: "/profile" },
       { label: "Logout", onClick: handleLogout },
     ],
     admin: [
       { label: "Dashboard", href: "/dashboard" },
-      { label: "Product Management", href: "/admin-product" },
-      { label: "Purchase Management", href: "/admin-purchases" },
+      { label: "Product Management", href: "/products" },
+      { label: "Purchase Management", href: "/purchases" },
       { label: "List User", href: "/users" },
       { label: "Profile", href: "/profile" },
       { label: "Logout", onClick: handleLogout },
