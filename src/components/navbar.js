@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar() {
   const router = useRouter();
@@ -20,6 +21,9 @@ export default function Navbar() {
   const handleLogout = () => {
     sessionStorage.removeItem("role");
     router.push("/login");
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
   };
 
   const menu = {
@@ -35,10 +39,10 @@ export default function Navbar() {
       { label: "Logout", onClick: handleLogout },
     ],
     admin: [
-      { label: "Dashboard", href: "/admin/dashboard" },
-      { label: "Product Management", href: "/admin/product" },
-      { label: "Purchase Management", href: "/admin/purchases" },
-      { label: "List User", href: "/admin/users" },
+      { label: "Dashboard", href: "/dashboard" },
+      { label: "Product Management", href: "/admin-product" },
+      { label: "Purchase Management", href: "/admin-purchases" },
+      { label: "List User", href: "/users" },
       { label: "Profile", href: "/profile" },
       { label: "Logout", onClick: handleLogout },
     ],
@@ -49,11 +53,20 @@ export default function Navbar() {
   return (
     <>
       {/* Navbar */}
-      <nav className="bg-[#2c7be5] text-white px-6 py-4 shadow-md">
+      <nav className="bg-[#2c7be5] text-white px-6 py-3 shadow-md">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="text-xl font-bold">
-            MEDISHOP
-          </Link>
+          <div className="flex items-center gap-2">
+            <Image
+              src="/medishop2.png"
+              alt="Medishop Logo"
+              width={64}
+              height={64}
+              className="w-8 h-8"
+            />
+            <Link href="/" className="text-xl font-bold">
+              MEDISHOP
+            </Link>
+          </div>
 
           {/* Mobile menu button */}
           <button
