@@ -38,6 +38,7 @@ export async function POST(req) {
       id: user.user_id,
       username: user.username,
       email: user.email,
+      role: user.role,
       date_of_birth: user.date_of_birth,
       gender: user.gender,
       address: user.address,
