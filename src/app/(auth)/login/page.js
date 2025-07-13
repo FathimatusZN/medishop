@@ -40,6 +40,9 @@ export default function LoginPage() {
       } else {
         router.push("/"); // fallback if role is unknown
       }
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } catch (err) {
       setError("Login failed. Please try again later.");
     }
