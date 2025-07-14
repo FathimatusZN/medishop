@@ -10,7 +10,10 @@ export default function TransactionDetailPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [feedback, setFeedback] = useState(""); // ⬅️ inisialisasi awal kosong
+  const [saving, setSaving] = useState(false);
 
+  // Ambil data transaksi
   useEffect(() => {
     fetch(`/api/transaction?id=${id}`)
       .then((res) => res.json())
@@ -18,6 +21,10 @@ export default function TransactionDetailPage() {
         if (data.message) setError(data.message);
         else {
           setTransaction(data);
+
+          // ⬅️ Set feedback setelah data tersedia
+          setFeedback(data.feedback || "");
+
           // fetch cart items detail
           const cartItemIds = data.cart_item_ids;
           if (Array.isArray(cartItemIds) && cartItemIds.length > 0) {
@@ -56,6 +63,28 @@ export default function TransactionDetailPage() {
     } catch (err) {
       console.error(err);
       alert("Failed to cancel transaction.");
+    }
+  };
+
+  const handleSubmitFeedback = async () => {
+    if (!feedback.trim()) return alert("Feedback cannot be empty.");
+
+    setSaving(true);
+    const res = await fetch("/api/transaction", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        transaction_id: transaction.transaction_id,
+        feedback,
+      }),
+    });
+
+    const result = await res.json();
+    setSaving(false);
+    if (res.ok) {
+      alert("Feedback saved successfully.");
+    } else {
+      alert(result.message || "Failed to save feedback.");
     }
   };
 
@@ -136,6 +165,29 @@ export default function TransactionDetailPage() {
         </a>
       </div>
 
+      {/* Feedback section */}
+      {transaction.transaction_status === "completed" &&
+        transaction.shipping_status === "delivered" && (
+          <div className="mt-6 border-t pt-4">
+            <h3 className="font-semibold text-sm mb-2">Your Feedback:</h3>
+            <textarea
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              rows={4}
+              placeholder="Write your feedback here..."
+              className="w-full p-2 border rounded text-sm"
+            />
+            <button
+              onClick={handleSubmitFeedback}
+              disabled={saving}
+              className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            >
+              {transaction.feedback ? "Update Feedback" : "Submit Feedback"}
+            </button>
+          </div>
+        )}
+
+      {/* Cancel button if still pending */}
       {transaction.transaction_status === "pending" && (
         <div className="mt-6 text-right">
           <button
