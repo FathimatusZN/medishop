@@ -140,7 +140,7 @@ export default function OrderDetailPage() {
           <>
             <button
               onClick={() => handleAction("approve")}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mr-4"
             >
               Approve
             </button>
@@ -155,7 +155,7 @@ export default function OrderDetailPage() {
         {order.transaction_status === "approved" && (
           <button
             onClick={() => handleAction("ship")}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-4"
           >
             Mark as Shipped
           </button>
@@ -163,12 +163,29 @@ export default function OrderDetailPage() {
         {order.shipping_status === "shipped" && (
           <button
             onClick={() => handleAction("complete")}
-            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 ml-4"
           >
             Mark as Delivered
           </button>
         )}
       </div>
+      <div>
+        <a
+          href={`/api/invoice?id=${order.transaction_id}`}
+          target="_blank"
+          className="inline-block bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 mt-4"
+        >
+          Download Invoice (PDF)
+        </a>
+      </div>
+      {order.feedback && (
+        <div className="mt-6 border-t pt-4">
+          <h3 className="font-semibold mb-2 text-sm">User Feedback</h3>
+          <div className="bg-white border border-gray-300 p-3 rounded shadow-sm text-sm text-gray-700">
+            {order.feedback}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
