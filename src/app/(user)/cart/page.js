@@ -150,6 +150,9 @@ export default function CartPage() {
       const result = await res.json();
 
       if (res.ok) {
+        await fetch(
+          `/api/send-invoice?transaction_id=${result.transaction_id}`
+        );
         alert("Checkout success! Transaction ID : " + result.transaction_id);
         fetchCart();
         setPaymentType("");
