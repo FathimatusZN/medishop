@@ -32,6 +32,36 @@ export default function ProductDetailPage() {
     );
   }
 
+  // handleBuy
+  const handleBuy = async (product_id) => {
+    const user_id = sessionStorage.getItem("user_id");
+
+    if (!user_id) {
+      alert("Please login first");
+      router.push("/login");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id,
+          product_id,
+          quantity: 1,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to add to cart");
+
+      alert("Added to cart!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add to cart");
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 relative">
       {/* Back Button */}
@@ -79,10 +109,10 @@ export default function ProductDetailPage() {
           </div>
 
           <button
-            onClick={() => alert("Buying...")}
-            className="w-full md:w-fit bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition"
+            onClick={() => handleBuy(product.product_id)}
+            className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
           >
-            Buy Now
+            Buy
           </button>
         </div>
       </div>
