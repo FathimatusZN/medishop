@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import Image from "next/image";
 
 export default function Navbar() {
@@ -20,6 +20,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     sessionStorage.removeItem("role");
+    sessionStorage.removeItem("user_id");
     router.push("/login");
     setTimeout(() => {
       window.location.reload();
@@ -29,6 +30,7 @@ export default function Navbar() {
   const menu = {
     guest: [
       { label: "Product", href: "/product" },
+      { label: "Guestbook", href: "/guestbook" },
       { label: "Login", href: "/login" },
     ],
     buyer: [
@@ -40,9 +42,12 @@ export default function Navbar() {
     ],
     admin: [
       { label: "Dashboard", href: "/dashboard" },
-      { label: "Product Management", href: "/products" },
-      { label: "Order Management", href: "/orders" },
-      { label: "List User", href: "/users" },
+      { label: "Products", href: "/products" },
+      { label: "Orders", href: "/orders" },
+      { label: "Feedback", href: "/feedback" },
+      { label: "Users", href: "/users" },
+      { label: "Guestbook", href: "/guestbook-list" },
+      { label: "Reports", href: "/reports" },
       { label: "Profile", href: "/profile" },
       { label: "Logout", onClick: handleLogout },
     ],
@@ -78,8 +83,9 @@ export default function Navbar() {
 
           {/* Desktop Menu */}
           <ul className="hidden lg:flex flex-row items-center text-sm font-medium">
-            {navItems.map((item, idx) =>
-              item.href ? (
+            {navItems.map((item, idx) => {
+              const isLogout = item.label === "Logout";
+              return item.href ? (
                 <li key={idx}>
                   <Link
                     href={item.href}
@@ -92,13 +98,18 @@ export default function Navbar() {
                 <li key={idx}>
                   <button
                     onClick={item.onClick}
-                    className="hover:underline hover:text-gray-200 transition"
+                    className={`flex items-center gap-1 px-4 transition ${
+                      isLogout
+                        ? "text-black hover:text-red-400"
+                        : "hover:underline hover:text-gray-200"
+                    }`}
                   >
+                    {isLogout && <LogOut size={16} />}
                     {item.label}
                   </button>
                 </li>
-              )
-            )}
+              );
+            })}
           </ul>
         </div>
       </nav>
@@ -106,13 +117,14 @@ export default function Navbar() {
       {/* Mobile Sidebar */}
       {isSidebarOpen && (
         <div className="lg:hidden bg-[#2c7be5] text-white p-4 space-y-4 shadow-md">
-          {navItems.map((item, idx) =>
-            item.href ? (
+          {navItems.map((item, idx) => {
+            const isLogout = item.label === "Logout";
+            return item.href ? (
               <Link
                 key={idx}
                 href={item.href}
                 className="block hover:underline hover:text-gray-200 transition"
-                onClick={() => setSidebarOpen(false)} // close after click
+                onClick={() => setSidebarOpen(false)}
               >
                 {item.label}
               </Link>
@@ -123,12 +135,17 @@ export default function Navbar() {
                   item.onClick?.();
                   setSidebarOpen(false);
                 }}
-                className="block w-full text-left hover:underline hover:text-gray-200 transition"
+                className={`flex items-center gap-1 w-full text-left transition ${
+                  isLogout
+                    ? "text-black hover:text-red-400"
+                    : "hover:underline hover:text-gray-200"
+                }`}
               >
+                {isLogout && <LogOut size={16} />}
                 {item.label}
               </button>
-            )
-          )}
+            );
+          })}
         </div>
       )}
     </>
