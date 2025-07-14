@@ -159,6 +159,22 @@ export async function PUT(req) {
   const body = await req.json();
   const { transaction_id, action } = body;
 
+  // Cek jika update feedback
+  if (body.feedback && transaction_id) {
+    try {
+      await db.query(
+        `UPDATE transactions SET feedback = $1 WHERE transaction_id = $2`,
+        [body.feedback, transaction_id]
+      );
+      return NextResponse.json({ message: "Feedback updated" });
+    } catch (err) {
+      console.error("PUT feedback error:", err);
+      return NextResponse.json(
+        { message: "Failed to update feedback" },
+        { status: 500 }
+      );
+    }
+  }
   if (!transaction_id || !action) {
     return NextResponse.json(
       { message: "Missing transaction_id or action" },
