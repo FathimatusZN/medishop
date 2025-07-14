@@ -5,20 +5,48 @@ import db from "@/db";
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const user_id = searchParams.get("user_id");
+  const idsParam = searchParams.get("ids");
 
-  if (!user_id) {
-    return NextResponse.json({ message: "Missing user_id" }, { status: 400 });
+  try {
+    if (idsParam) {
+      // Ambil banyak cart_items berdasarkan ids
+      const ids = idsParam
+        .split(",")
+        .map((id) => parseInt(id))
+        .filter(Boolean);
+
+      const result = await db.query(
+        `SELECT ci.*, p.product_name, p.price, p.image
+         FROM cart_items ci
+         JOIN products p ON ci.product_id = p.product_id
+         WHERE ci.cart_item_id = ANY($1::int[])`,
+        [ids]
+      );
+
+      return NextResponse.json(result.rows);
+    }
+
+    if (user_id) {
+      // Ambil semua cart item milik user yang belum checkout
+      const result = await db.query(
+        `SELECT ci.*, p.product_name, p.price, p.image 
+         FROM cart_items ci 
+         JOIN products p ON ci.product_id = p.product_id 
+         WHERE ci.user_id = $1 AND ci.checked_out = false`,
+        [user_id]
+      );
+
+      return NextResponse.json(result.rows);
+    }
+
+    return NextResponse.json(
+      { message: "Missing query parameter" },
+      { status: 400 }
+    );
+  } catch (e) {
+    console.error("GET /cart error:", e);
+    return NextResponse.json({ message: "Internal error" }, { status: 500 });
   }
-
-  const result = await db.query(
-    `SELECT ci.*, p.product_name, p.price, p.image 
-     FROM cart_items ci 
-     JOIN products p ON ci.product_id = p.product_id 
-     WHERE ci.user_id = $1 AND ci.checked_out = false`,
-    [user_id]
-  );
-
-  return NextResponse.json(result.rows);
 }
 
 // POST: add to cart (or update quantity if it already exists)
