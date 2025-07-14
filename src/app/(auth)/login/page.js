@@ -137,6 +137,18 @@ export default function LoginPage() {
             Register
           </a>
         </div>
+
+        {/* Link to fill guestbook */}
+        <div className="text-center text-sm text-gray-500 mt-2">
+          Fill guestbook withouth login{" "}
+          <a
+            href="/guestbook"
+            className="text-[#2c7be5] font-medium hover:underline"
+          >
+            here
+          </a>
+          .
+        </div>
       </form>
     </main>
   );
