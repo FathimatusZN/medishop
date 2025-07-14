@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "date-fns": "^4.1.0",
+    "file-saver": "^2.0.5",
     "formidable": "^3.5.4",
     "fs-extra": "^11.3.0",
     "get-stream": "^9.0.1",
