@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function OrderDetailPage() {
   const { id } = useParams();
@@ -72,120 +73,122 @@ export default function OrderDetailPage() {
   );
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Order Detail</h1>
-      <div className="space-y-2 text-sm mb-6">
-        <p>
-          <strong>Transaction ID:</strong> {order.transaction_id}
-        </p>
-        <p>
-          <strong>User ID:</strong> {order.user_id}
-        </p>
-        <p>
-          <strong>Username:</strong> {order.username}
-        </p>
-        <p>
-          <strong>Date:</strong>{" "}
-          {new Date(order.transaction_date).toLocaleString()}
-        </p>
-        <p>
-          <strong>Total:</strong> Rp.{order.total_price}
-        </p>
-        <p>
-          <strong>Payment:</strong> {order.payment_method.toUpperCase()} via{" "}
-          {order.payment_bank}
-        </p>
-        <p>
-          <strong>Payment Status:</strong> {order.payment_status}
-        </p>
-        <p>
-          <strong>Transaction Status:</strong> {order.transaction_status}
-        </p>
-        <p>
-          <strong>Shipping Status:</strong> {order.shipping_status || "-"}
-        </p>
-      </div>
-
-      <h2 className="text-lg font-semibold mb-2">Items:</h2>
-      <table className="w-full text-sm border border-gray-200 rounded shadow-sm mb-6">
-        <thead className="bg-gray-100 text-gray-700">
-          <tr>
-            <th className="p-2 text-left">Product</th>
-            <th className="p-2">Price</th>
-            <th className="p-2">Qty</th>
-            <th className="p-2">Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item) => (
-            <tr key={item.cart_item_id} className="border-t text-center">
-              <td className="p-2 text-left">{item.product_name}</td>
-              <td className="p-2">Rp.{item.price}</td>
-              <td className="p-2">{item.quantity}</td>
-              <td className="p-2">Rp.{item.price * item.quantity}</td>
-            </tr>
-          ))}
-          <tr className="bg-gray-50 text-lg border-t font-semibold">
-            <td colSpan={3} className="p-2 text-right">
-              Total:
-            </td>
-            <td className="text-center p-2 text-[#008B8B]">Rp.{total}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      {/* Admin Actions */}
-      <div className="space-x-2 mt-4">
-        {order.transaction_status === "pending" && (
-          <>
-            <button
-              onClick={() => handleAction("approve")}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mr-4"
-            >
-              Approve
-            </button>
-            <button
-              onClick={() => handleAction("reject")}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            >
-              Reject
-            </button>
-          </>
-        )}
-        {order.transaction_status === "approved" && (
-          <button
-            onClick={() => handleAction("ship")}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-4"
-          >
-            Mark as Shipped
-          </button>
-        )}
-        {order.shipping_status === "shipped" && (
-          <button
-            onClick={() => handleAction("complete")}
-            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 ml-4"
-          >
-            Mark as Delivered
-          </button>
-        )}
-      </div>
-      <div>
-        <a
-          href={`/api/invoice?id=${order.transaction_id}`}
-          target="_blank"
-          className="inline-block bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 mt-4"
-        >
-          Download Invoice (PDF)
-        </a>
-      </div>
-      {order.feedback && (
-        <div className="mt-6 border-t pt-4">
-          <h3 className="font-semibold mb-2 text-sm">User Feedback</h3>
-          <div className="bg-white border border-gray-300 p-3 rounded shadow-sm text-sm text-gray-700">
-            {order.feedback}
-          </div>
+    <ProtectedRoute allowedRoles={["2"]}>
+      <div className="max-w-5xl mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-4">Order Detail</h1>
+        <div className="space-y-2 text-sm mb-6">
+          <p>
+            <strong>Transaction ID:</strong> {order.transaction_id}
+          </p>
+          <p>
+            <strong>User ID:</strong> {order.user_id}
+          </p>
+          <p>
+            <strong>Username:</strong> {order.username}
+          </p>
+          <p>
+            <strong>Date:</strong>{" "}
+            {new Date(order.transaction_date).toLocaleString()}
+          </p>
+          <p>
+            <strong>Total:</strong> Rp.{order.total_price}
+          </p>
+          <p>
+            <strong>Payment:</strong> {order.payment_method.toUpperCase()} via{" "}
+            {order.payment_bank}
+          </p>
+          <p>
+            <strong>Payment Status:</strong> {order.payment_status}
+          </p>
+          <p>
+            <strong>Transaction Status:</strong> {order.transaction_status}
+          </p>
+          <p>
+            <strong>Shipping Status:</strong> {order.shipping_status || "-"}
+          </p>
         </div>
-      )}
-    </div>
+
+        <h2 className="text-lg font-semibold mb-2">Items:</h2>
+        <table className="w-full text-sm border border-gray-200 rounded shadow-sm mb-6">
+          <thead className="bg-gray-100 text-gray-700">
+            <tr>
+              <th className="p-2 text-left">Product</th>
+              <th className="p-2">Price</th>
+              <th className="p-2">Qty</th>
+              <th className="p-2">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <tr key={item.cart_item_id} className="border-t text-center">
+                <td className="p-2 text-left">{item.product_name}</td>
+                <td className="p-2">Rp.{item.price}</td>
+                <td className="p-2">{item.quantity}</td>
+                <td className="p-2">Rp.{item.price * item.quantity}</td>
+              </tr>
+            ))}
+            <tr className="bg-gray-50 text-lg border-t font-semibold">
+              <td colSpan={3} className="p-2 text-right">
+                Total:
+              </td>
+              <td className="text-center p-2 text-[#008B8B]">Rp.{total}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* Admin Actions */}
+        <div className="space-x-2 mt-4">
+          {order.transaction_status === "pending" && (
+            <>
+              <button
+                onClick={() => handleAction("approve")}
+                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mr-4"
+              >
+                Approve
+              </button>
+              <button
+                onClick={() => handleAction("reject")}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Reject
+              </button>
+            </>
+          )}
+          {order.transaction_status === "approved" && (
+            <button
+              onClick={() => handleAction("ship")}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-4"
+            >
+              Mark as Shipped
+            </button>
+          )}
+          {order.shipping_status === "shipped" && (
+            <button
+              onClick={() => handleAction("complete")}
+              className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 ml-4"
+            >
+              Mark as Delivered
+            </button>
+          )}
+        </div>
+        <div>
+          <a
+            href={`/api/invoice?id=${order.transaction_id}`}
+            target="_blank"
+            className="inline-block bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 mt-4"
+          >
+            Download Invoice (PDF)
+          </a>
+        </div>
+        {order.feedback && (
+          <div className="mt-6 border-t pt-4">
+            <h3 className="font-semibold mb-2 text-sm">User Feedback</h3>
+            <div className="bg-white border border-gray-300 p-3 rounded shadow-sm text-sm text-gray-700">
+              {order.feedback}
+            </div>
+          </div>
+        )}
+      </div>
+    </ProtectedRoute>
   );
 }
