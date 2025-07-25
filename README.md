@@ -1,12 +1,12 @@
-🏥 Medishop – E-Commerce Platform for Medical Products
+# Medishop – E-Commerce Platform for Medical Products #
 
 Medishop is a full-stack web application that allows users to browse, purchase, and manage medical-related products efficiently. It includes features for both end-users and administrators, designed with scalability and usability in mind.
 
 ---
 
-✨ Features
+## Features ##
 
-👥 User Features
+### 👥 User Features ###
 - User registration and login with session-based role handling
 - Browse products with category mapping
 - Add to cart and checkout functionality
@@ -14,7 +14,7 @@ Medishop is a full-stack web application that allows users to browse, purchase, 
 - Feedback system for completed orders
 - Guestbook for user testimonials
 
-🛒 Admin Features
+### 🛒 Admin Features ###
 - Admin dashboard with store summary (total users, products, income, etc.)
 - Product management (CRUD with image upload)
 - User management
@@ -23,7 +23,7 @@ Medishop is a full-stack web application that allows users to browse, purchase, 
 
 ---
 
-🧰 Technologies Used
+## Technologies Used ##
 
 - Frontend: Next.js 14 (App Router), React, Tailwind CSS 4
 - Backend: Next.js API Routes (Node.js), PostgreSQL
@@ -35,7 +35,7 @@ Medishop is a full-stack web application that allows users to browse, purchase, 
 
 ---
 
-🗂️ Project Structure (Simplified)
+## Project Structure (Simplified) ##
 
 ```
 .next/
@@ -82,7 +82,7 @@ README.md
 
 ---
 
-🚀 Getting Started
+# Getting Started #
 
 1. Clone the Repository
 
@@ -99,10 +99,14 @@ npm install
 
 3. Set Up Environment Variables
 
-Create a `.env.local` file with the following (example):
+Create a `.env` file with the following (example):
 
 ```
-DATABASE_URL=postgresql://user:password@localhost:5432/medishop
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASS=your_db_password
+DB_NAME=your_db_name
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password
 BASE_URL=http://localhost:3000
@@ -118,18 +122,18 @@ Access the app at `http://localhost:3000`
 
 ---
 
-📦 Deployment
+## Deployment ##
 
 This app can be deployed on Vercel, Render, or any Node.js-compatible hosting. Make sure to also provision a PostgreSQL database and configure environment variables accordingly.
 
 ---
 
-📄 License
+## License ##
 
 This project is licensed for educational and development use.
 
 ---
 
-🙋‍♀️ Acknowledgements
+## Acknowledgements ##
 
 Thanks to all open-source libraries and frameworks used in this project.
