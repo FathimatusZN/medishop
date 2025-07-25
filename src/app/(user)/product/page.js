@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const categoryOptions = [
   { value: "1", label: "Medicine and Supplements" },
@@ -70,71 +71,73 @@ export default function ProductListPage() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">Our Products</h1>
+    <ProtectedRoute allowedRoles={["1", "2"]}>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4 text-center">Our Products</h1>
 
-      {/* Filter */}
-      <div className="flex justify-center mb-6">
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border px-4 py-2 rounded shadow"
-        >
-          <option value="">All Category</option>
-          {categoryOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {filtered.map((product) => (
-          <div
-            key={product.product_id}
-            className="bg-white border rounded-xl shadow hover:shadow-md transition p-4 flex flex-col items-center"
+        {/* Filter */}
+        <div className="flex justify-center mb-6">
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="border px-4 py-2 rounded shadow"
           >
-            {product.image && (
-              <Image
-                src={product.image}
-                alt={product.product_name}
-                width={200}
-                height={200}
-                className="object-contain rounded-md mb-3"
-              />
-            )}
+            <option value="">All Category</option>
+            {categoryOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
-            <h2 className="text-lg font-semibold text-center">
-              {product.product_name}
-            </h2>
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {filtered.map((product) => (
+            <div
+              key={product.product_id}
+              className="bg-white border rounded-xl shadow hover:shadow-md transition p-4 flex flex-col items-center"
+            >
+              {product.image && (
+                <Image
+                  src={product.image}
+                  alt={product.product_name}
+                  width={200}
+                  height={200}
+                  className="object-contain rounded-md mb-3"
+                />
+              )}
 
-            <h1 className="text-md font-bold text-center text-[#008B8B] mb-2">
-              Rp.{product.price}
-            </h1>
+              <h2 className="text-lg font-semibold text-center">
+                {product.product_name}
+              </h2>
 
-            <div className="flex gap-2">
-              <button
-                onClick={() => router.push(`/product/${product.product_id}`)}
-                className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
-              >
-                View
-              </button>
-              <button
-                onClick={() => handleBuy(product.product_id)}
-                className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
-              >
-                Buy
-              </button>
+              <h1 className="text-md font-bold text-center text-[#008B8B] mb-2">
+                Rp.{product.price}
+              </h1>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => router.push(`/product/${product.product_id}`)}
+                  className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                >
+                  View
+                </button>
+                <button
+                  onClick={() => handleBuy(product.product_id)}
+                  className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+                >
+                  Buy
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      {filtered.length === 0 && (
-        <p className="text-center mt-10 text-gray-500">No products found.</p>
-      )}
-    </div>
+        {filtered.length === 0 && (
+          <p className="text-center mt-10 text-gray-500">No products found.</p>
+        )}
+      </div>
+    </ProtectedRoute>
   );
 }
